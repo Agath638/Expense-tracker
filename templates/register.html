@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Expense Tracker{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <h2>📝 Register</h2>
+        <p class="auth-subtitle">Create your account to start tracking expenses.</p>
+        
+        <form method="POST" action="{{ url_for('auth.register') }}" class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required 
+                       placeholder="Choose a username">
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required 
+                       placeholder="Create a password">
+                <p class="password-hint">Password must be at least 8 characters and include letters, numbers, and special characters.</p>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm_password">Confirm Password</label>
+                <input type="password" id="confirm_password" name="confirm_password" required 
+                       placeholder="Confirm your password">
+            </div>
+            
+            <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+        
+        <div class="auth-footer">
+            <p>Already have an account? <a href="{{ url_for('auth.login') }}">Login here</a></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const form = document.querySelector('.auth-form');
+        const passwordInput = document.getElementById('password');
+        const confirmInput = document.getElementById('confirm_password');
+
+        if (!form) return;
+
+        form.addEventListener('submit', function(event) {
+            const password = passwordInput.value;
+            const confirm = confirmInput.value;
+            const valid = password.length >= 8
+                && /[A-Za-z]/.test(password)
+                && /\d/.test(password)
+                && /[^A-Za-z0-9]/.test(password);
+
+            if (!valid) {
+                event.preventDefault();
+                alert('Password must be at least 8 characters and include letters, numbers, and special characters.');/*for cyber security, enforce strong password criteria to protect user accounts*/
+                return;
+            }
+
+            if (password !== confirm) {
+                event.preventDefault();
+                alert('Passwords do not match.');
+            }
+        });
+    });
+</script>
+{% endblock %}
